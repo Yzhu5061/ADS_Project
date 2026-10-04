@@ -1,0 +1,14 @@
+日期：2026.10.02
+项目：ADS低速拦截系统
+阶段：1（已完成，正在改善）
+---------------------------------
+今日完成内容：
+1.将项目重命名，使其更易读。
+2.在HSV_picker中创建滑动条，使该工程使用起来更加简单，无需一直盯着跳动的HSV值。
+3.加入了读取鼠标事件的功能，使鼠标双击后能够显示出当前的HSV值和位置坐标。
+发现的问题：
+1.img（滑动条）窗口在关闭后会导致崩溃。----解决：加入由try-except包含的cv2.getWindowProperty进行保护。
+2.img窗口与实际GUI不匹配。----解决：加入cv2.WINDOW_NORMAL实现自定义调整窗口。
+3.“NULL window: 'frame' in function 'setMouseCallbackImpl'”报错。----解决：将cv2.setMouseCallback('frame', draw_circle)移动到imshow后。
+3.5.“cv2.setMouseCallback”放在循环内会一直占用资源，但移除循环会因为没有frame图像而崩溃。----解决：在开始时创建cv2.namedWindow('frame',cv2.WINDOW_NORMAL)并将def draw_circle和cv2.setMouseCallback跟在后面。
+4.“cv2.circle(frame, (x, y), 5, (0, 0, 255), 2)”死代码，无法正确执行。个人认为是显示出来了被下一帧立马刷新掉了。----解决：将该代码移动至cap.read后，imshow之前，这样在新图像刷新出的一瞬间就可以画圆，而不会在新图像刷新后才在之前的原图像中创建。
